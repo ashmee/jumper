@@ -1,5 +1,5 @@
 {
-  "name": "memory-phaser-ts",
+  "name": "jumper-phaser-ts",
   "version": "1.0.0",
   "description": "A template project for Phaser 3 using Parceljs",
   "scripts": {
@@ -33,10 +33,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ashmee/memory.git"
+    "url": "git+https://github.com/ashmee/jumper.git"
   },
   "bugs": {
-    "url": "https://github.com/ashmee/memory/issues"
+    "url": "https://github.com/ashmee/jumper/issues"
   },
-  "homepage": "https://github.com/ashmee/memory#readme"
+  "homepage": "https://github.com/ashmee/jumper#readme"
 }
