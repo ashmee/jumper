@@ -1,0 +1,17 @@
+*.lint
+*.fix
+package-lock.json
+
+__temp_packages__
+node_modules
+.cache
+dist
+
+# Tests
+*/__fixtures__/*
+*/__snapshots__/*
+*.fixture.*
+
+# Packages sources
+packages/linters/tslint/rules
+packages/linters/tslint/src
