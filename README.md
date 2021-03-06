@@ -4,6 +4,8 @@
 
 Посмотреть собранную версию можно на github pages => тут https://ashmee.github.io/jumper/
 
+Не работает на мобильных устройствах (с touch экранами) 
+
 -------
 
 ## Languages & tools
