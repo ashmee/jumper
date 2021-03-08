@@ -10,6 +10,9 @@ export default class GameScene extends Phaser.Scene {
     private bombMaker: BombMaker | undefined;
     private stars: Phaser.Physics.Arcade.Group | undefined;
     private gameOver: boolean;
+    private getStarSound: Phaser.Sound.BaseSound | undefined;
+    private lvlUpSound: Phaser.Sound.BaseSound | undefined;
+    private gameOverSound: Phaser.Sound.BaseSound | undefined;
 
     constructor() {
         super('game-scene');
@@ -19,6 +22,11 @@ export default class GameScene extends Phaser.Scene {
 
     preload(): void {
         const loaderPlugin: Phaser.Loader.LoaderPlugin = this.load;
+
+        loaderPlugin.audio('starSound', ['start.mp3']);
+        loaderPlugin.audio('levelUpSound', ['lvlUp.mp3']);
+        loaderPlugin.audio('gameOverSound', ['gameOver.wav']);
+
         loaderPlugin.image(Key.SKY, 'sky.png');
         loaderPlugin.image(Key.GROUND, 'platform.png');
         loaderPlugin.image(Key.STAR, 'star.png');
@@ -29,6 +37,10 @@ export default class GameScene extends Phaser.Scene {
 
     create() {
         this.add.image(400, 300, Key.SKY);
+
+        this.getStarSound = this.sound.add('starSound', {loop: false});
+        this.lvlUpSound = this.sound.add('levelUpSound', {loop: false});
+        this.gameOverSound = this.sound.add('gameOverSound', {loop: false});
 
         const platforms = this.createPlatforms();
         this.player = this.createPlayer();
@@ -113,9 +125,11 @@ export default class GameScene extends Phaser.Scene {
     collectStar(player, star) {
         star.disableBody(true, true);
         this?.scoreLabel && (this.scoreLabel as any).add(10);
+        this?.getStarSound?.play();
 
         if (this?.stars?.countActive(true) === 0) {
             player.setTint(0xffff00);
+            this?.lvlUpSound?.play();
             player.setScale(1.2);
             setTimeout(() => {
                 player.clearTint();
@@ -126,14 +140,17 @@ export default class GameScene extends Phaser.Scene {
             });
         }
 
-        this?.bombMaker?.spawn(player.x);
+        const randomSpawnBomb = Math.round(Math.random());
+        if (randomSpawnBomb) {
+            this?.bombMaker?.spawn(player.x);
+        }
     }
 
     createStars() {
         const stars = this.physics.add.group({
             key: Key.STAR,
-            repeat: 7,
-            setXY: {x: 12, y: 0, stepX: 125},
+            repeat: 9,
+            setXY: {x: 12, y: 0, stepX: 85},
         });
 
         stars.children.iterate(child => {
@@ -169,6 +186,7 @@ export default class GameScene extends Phaser.Scene {
 
     bombTouch(player, bomb) {
         this.physics.pause();
+        this?.gameOverSound?.play();
 
         const text = this.add.text(160, 100, 'Game over', {fontSize: '80px'});
         const blinking = setInterval(() => {
